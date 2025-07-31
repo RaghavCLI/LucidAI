@@ -4,11 +4,19 @@ import Lookup from "@/app/data/Lookup";
 import { ArrowRight, Link } from "lucide-react";
 import React, { useState, useContext } from "react";
 import { MessagesContext } from "../../context/MessagesContext";
+import { UserDetailContext } from "../../context/UserDetailContext";
+import SignInDialog from "./SignInDialog";
 
 function Hero() {
   const [userInput, setUserInput] = useState();
   const { messages, setMessages } = useContext(MessagesContext);
+  const { userDetail, setUserDetail } = useContext(UserDetailContext);
+  const [openDialog, setOpenDialog] = useState(false);
   const onGenerate = (input) => {
+    if (!userDetail?.name) {
+      setOpenDialog(true);
+      return;
+    }
     setMessages({
       role: "user",
       content: input,
@@ -50,6 +58,10 @@ function Hero() {
           </h2>
         ))}
       </div>
+      <SignInDialog
+        openDialog={openDialog}
+        CloseDialog={(v) => setOpenDialog(false)}
+      />
     </div>
   );
 }

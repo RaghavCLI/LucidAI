@@ -19,6 +19,9 @@ module.exports = {
             "backgroundPosition": "-200% 0"
           }
         }
+      },
+      colors: {
+        'cosmic-deep': '#0a0a0f'
       }
     },
   },

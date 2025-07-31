@@ -14,8 +14,8 @@ export default {
   SIGNIN_HEADING: "Continue With Bolt.New 2.0",
   SIGNIN_SUBHEADING:
     "To use Bolt you must log into an existing account or create one.",
-  SIGNIn_AGREEMENT_TEXT:
-    "By using Bolt, you agree to the collection of usage data for analytics.",
+  SIGNIN_AGREEMENT_TEXT:
+    "By using lucidAI, you agree to the collection of usage data for analytics.",
 
   DEFAULT_FILE: {
     "/public/index.html": {
