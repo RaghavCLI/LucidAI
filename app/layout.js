@@ -1,6 +1,7 @@
 import { Space_Grotesk, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
 import { ThemeProvider } from "../components/Theme-provider";
+import ConvexClientProvider from "./ConvexClientProvider";
 
 
 const spaceGrotesk = Space_Grotesk({
@@ -34,14 +35,16 @@ export default function RootLayout({ children }) {
               } catch (e) {}
             `,
           }}
-        />
+        /> 
       </head>
       <body
         className={`${spaceGrotesk.variable} ${jetbrainsMono.variable} antialiased font-sans`}
       >
-        <ThemeProvider attribute="class" defaultTheme="dark" enableSystem={false}>
-          {children}
-        </ThemeProvider>
+        <ConvexClientProvider>
+          <ThemeProvider attribute="class" defaultTheme="dark" enableSystem={false}>
+            {children}
+          </ThemeProvider>
+        </ConvexClientProvider>
       </body>
     </html>
   );
