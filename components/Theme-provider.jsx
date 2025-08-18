@@ -21,14 +21,19 @@ export function ThemeProvider(props) {
   }, []);
 
   const isAuthenticated = async () => {
-    if (typeof window !== undefined) {
-      const user = JSON.parse(localStorage.getItem("user"));
-      // fetch from db
-      const result = await convex.query(api.users.getUser, {
-        email: user?.email,
-      });
-      setUserDetail(result);
-      console.log(result);
+    if (typeof window !== "undefined") {
+      const userString = localStorage.getItem("user");
+      if (userString) {
+        const user = JSON.parse(userString);
+        if (user?.email) {
+          // fetch from db
+          const result = await convex.query(api.users.getUser, {
+            email: user.email,
+          });
+          setUserDetail(result);
+          console.log(result);
+        }
+      }
     }
   };
   return (
