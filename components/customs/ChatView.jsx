@@ -4,11 +4,17 @@ import { UserDetailContext } from "@/context/UserDetailContext";
 import { api } from "@/convex/_generated/api";
 import { useConvex } from "convex/react";
 import { useParams } from "next/navigation";
-import React, { useContext, useEffect } from "react";
+import React, { use, useContext, useEffect } from "react";
 import Image from "next/image";
 import Lookup from "@/app/data/Lookup";
 import { ArrowRight, Link } from "lucide-react";
 import { useState } from "react";
+import axios from "axios";
+import prompt from "@/app/data/Prompt";
+import { LoaderFive } from "@/components/ui/loader";
+import colors from "@/app/data/Colors";
+import { useMutation } from "convex/react";
+import ReactMarkdown from "react-markdown";
 
 function ChatView() {
   const { id } = useParams();
@@ -16,6 +22,8 @@ function ChatView() {
   const { userDetail, setuserDetail } = useContext(UserDetailContext);
   const { messages, setMessages } = useContext(MessagesContext);
   const [userInput, setUserInput] = useState();
+  const [loading, setLoading] = useState(false);
+  const UpdateMessages = useMutation(api.workspace.UpdateMessages);
 
   useEffect(() => {
     id && GetWorkspaceData();
@@ -25,29 +33,80 @@ function ChatView() {
     const result = await convex.query(api.workspace.GetWorkspace, {
       workspaceId: id,
     });
-    console.log("Workspace Data:", result);
     setMessages(result?.messages);
   };
+
+  // When a user message is added, trigger AI response
+  useEffect(() => {
+    if (messages?.length > 0) {
+      const role = messages[messages?.length - 1].role;
+      if (role === "msg") {
+        //GetAiResponse();
+      }
+    }
+  }, [messages]);
+
+  const GetAiResponse = async () => {
+    try {
+      setLoading(true);
+      const PROMPT = JSON.stringify(messages) + prompt.CHAT_PROMPT;
+      const result = await axios.post("/api/ai-chat", { prompt: PROMPT });
+      if (result.data.result) {
+        setMessages((prev) => [
+          ...prev,
+          { role: "ai", content: result.data.result },
+        ]);
+        await UpdateMessages({
+          messages: [...messages, { role: "ai", content: result.data.result }],
+          workspaceId: id,
+        });
+        setLoading(false);
+      }
+    } catch (error) {
+      console.error("Error getting AI response:", error);
+      // Optionally show error to user
+    }
+  };
+
+  // Send user message
+  const onGenerate = async (input) => {
+    if (!input?.trim()) return;
+    setMessages((prev) => [...prev, { role: "msg", content: input }]);
+    setUserInput("");
+  };
+
   return (
     <div className="relative h-[85vh] flex flex-col">
-      <div className="flex-1 overflow-y-auto p-4 scrollbar-hide">
+      <div className="flex-1 overflow-y-scroll p-4 scrollbar-hide">
         {messages?.map((msg, index) => (
           <div
             key={index}
             className="p-3 rounded-lg mb-2 flex gap-3 items-start"
+            style={
+              msg?.role !== "ai"
+                ? { backgroundColor: colors.CHAT_BACKGROUND }
+                : {}
+            }
           >
-            {msg?.role == "msg" && (
+            {msg?.role === "msg" && (
               <Image
                 src={userDetail?.picture}
-                alt="User Avatar"
+                alt="user-avatar"
                 width={35}
                 height={35}
                 className="rounded-full"
               />
             )}
-            <h2>{msg?.content}</h2>
+            <div>
+              <ReactMarkdown>{msg.content}</ReactMarkdown>
+            </div>
           </div>
         ))}
+        {loading && (
+          <div className="p-3">
+            <LoaderFive text="Generating AI Response..." />
+          </div>
+        )}
       </div>
       <div>
         {/* Message Input Area */}
@@ -55,6 +114,7 @@ function ChatView() {
           <div className="bg-black rounded-xl p-5 relative">
             <div className="flex gap-2">
               <textarea
+                value={userInput}
                 onChange={(event) => setUserInput(event.target.value)}
                 placeholder={Lookup.INPUT_PLACEHOLDER}
                 className="outline-none bg-transparent w-full h-32 max-h-56 resize"
