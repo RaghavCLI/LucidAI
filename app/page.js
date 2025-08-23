@@ -1,17 +1,15 @@
 import React from 'react'
-import Header from '../components/customs/Header'
 import Hero from '../components/customs/Hero'
 import CosmicBackground from '../components/ui/CosmicBackground'
 
 function page() {
   return (
-    <div className="min-h-screen w-full relative">
-      {/* Cosmic Background */}
+    <div className="relative">
+      {/* Cosmic Background only on home page */}
       <CosmicBackground />
-    
-      {/* Your Content/Components */}
+      
+      {/* Hero content with proper z-index */}
       <div className="relative z-10">
-        <Header />
         <Hero />
       </div>
     </div>

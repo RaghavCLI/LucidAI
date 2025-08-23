@@ -6,21 +6,34 @@ import React, { useState, useContext } from "react";
 import { MessagesContext } from "../../context/MessagesContext";
 import { UserDetailContext } from "../../context/UserDetailContext";
 import SignInDialog from "./SignInDialog";
+import { useRouter } from "next/navigation";
+import { useMutation } from "convex/react";
+import { api } from "@/convex/_generated/api";
 
 function Hero() {
   const [userInput, setUserInput] = useState();
   const { messages, setMessages } = useContext(MessagesContext);
   const { userDetail, setUserDetail } = useContext(UserDetailContext);
   const [openDialog, setOpenDialog] = useState(false);
-  const onGenerate = (input) => {
+  const CreateWorkspace = useMutation(api.workspace.CreateWorkSpace);
+  const router = useRouter();
+  const onGenerate = async (input) => {
     if (!userDetail?.name) {
       setOpenDialog(true);
       return;
     }
-    setMessages({
-      role: "user",
+    const msg = {
+      role: "msg",
       content: input,
+    };
+    setMessages(msg);
+
+    const workspaceId = await CreateWorkspace({
+      user: userDetail._id,
+      messages: [msg],
     });
+    console.log("Workspace created with ID:", workspaceId);
+    router.push("/workspace/" + workspaceId);
   };
   return (
     <div className="flex flex-col items-center mt-12 xl:mt-32 gap-2">

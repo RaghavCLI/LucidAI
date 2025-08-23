@@ -2,6 +2,7 @@ import { Space_Grotesk, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
 import { ThemeProvider } from "../components/Theme-provider";
 import ConvexClientProvider from "./ConvexClientProvider";
+import Header from "../components/customs/Header";
 
 
 const spaceGrotesk = Space_Grotesk({
@@ -42,7 +43,15 @@ export default function RootLayout({ children }) {
       >
         <ConvexClientProvider>
           <ThemeProvider attribute="class" defaultTheme="dark" enableSystem={false}>
-            {children}
+            <div className="min-h-screen w-full relative">
+              {/* Header on every page */}
+              <Header />
+              
+              {/* Page content */}
+              <main>
+                {children}
+              </main>
+            </div>
           </ThemeProvider>
         </ConvexClientProvider>
       </body>
