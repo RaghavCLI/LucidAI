@@ -20,8 +20,8 @@ function ChatView() {
   const { id } = useParams();
   const convex = useConvex();
   const { userDetail, setuserDetail } = useContext(UserDetailContext);
-  const { messages, setMessages } = useContext(MessagesContext);
-  const [userInput, setUserInput] = useState();
+  const { messages = [], setMessages } = useContext(MessagesContext);
+  const [userInput, setUserInput] = useState("");
   const [loading, setLoading] = useState(false);
   const UpdateMessages = useMutation(api.workspace.UpdateMessages);
 
@@ -41,7 +41,7 @@ function ChatView() {
     if (messages?.length > 0) {
       const role = messages[messages?.length - 1].role;
       if (role === "msg") {
-        //GetAiResponse();
+        GetAiResponse();
       }
     }
   }, [messages]);
@@ -77,31 +77,32 @@ function ChatView() {
 
   return (
     <div className="relative h-[85vh] flex flex-col">
-      <div className="flex-1 overflow-y-scroll p-4 scrollbar-hide">
-        {messages?.map((msg, index) => (
-          <div
-            key={index}
-            className="p-3 rounded-lg mb-2 flex gap-3 items-start"
-            style={
-              msg?.role !== "ai"
-                ? { backgroundColor: colors.CHAT_BACKGROUND }
-                : {}
-            }
-          >
-            {msg?.role === "msg" && (
-              <Image
-                src={userDetail?.picture}
-                alt="user-avatar"
-                width={35}
-                height={35}
-                className="rounded-full"
-              />
-            )}
-            <div>
-              <ReactMarkdown>{msg.content}</ReactMarkdown>
+      <div className="flex-1 flex-col gap-6 overflow-y-scroll pt-2 mx-0 scrollbar-hide">
+        {Array.isArray(messages) &&
+          messages.map((msg, index) => (
+            <div
+              key={index}
+              className="p-3 rounded-lg mb-2 flex gap-3 items-start"
+              style={
+                msg?.role !== "ai"
+                  ? { backgroundColor: colors.CHAT_BACKGROUND }
+                  : {}
+              }
+            >
+              {msg?.role === "msg" && (
+                <Image
+                  src={userDetail?.picture}
+                  alt="user-avatar"
+                  width={35}
+                  height={35}
+                  className="rounded-full"
+                />
+              )}
+              <div>
+                <ReactMarkdown>{msg.content}</ReactMarkdown>
+              </div>
             </div>
-          </div>
-        ))}
+          ))}
         {loading && (
           <div className="p-3">
             <LoaderFive text="Generating AI Response..." />
@@ -110,14 +111,14 @@ function ChatView() {
       </div>
       <div>
         {/* Message Input Area */}
-        <div className="relative rounded-xl max-w-xl w-full mt-3 p-[1px] bg-gradient-to-br from-white/30 via-white/10 to-transparent">
+        <div className="relative rounded-sm max-w-xl w-full mt-3 p-[1px] bg-gradient-to-br from-white/30 via-white/10 to-transparent">
           <div className="bg-black rounded-xl p-5 relative">
             <div className="flex gap-2">
               <textarea
                 value={userInput}
                 onChange={(event) => setUserInput(event.target.value)}
                 placeholder={Lookup.INPUT_PLACEHOLDER}
-                className="outline-none bg-transparent w-full h-32 max-h-56 resize"
+                className="outline-none bg-transparent w-full h-20 max-h-40 resize"
               />
               {userInput && (
                 <ArrowRight
