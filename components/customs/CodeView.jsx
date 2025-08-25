@@ -15,8 +15,8 @@ import prompt from "@/app/data/Prompt";
 import { useMutation } from "convex/react";
 import { useParams } from "next/navigation";
 import { api } from "@/convex/_generated/api";
-import { Loader2Icon } from "lucide-react";
 import { useQuery, useConvex } from "convex/react";
+import LoaderFourDemo from "@/components/ui/loader-four-demo";
 
 function CodeView() {
   const { id } = useParams();
@@ -117,9 +117,8 @@ function CodeView() {
       </SandpackProvider>
 
       {(loading || !workspaceData) && (
-        <div className="p-10 bg-gray-900 opacity-50 absolute top-0 rounded-lg w-full h-full flex items-center justify-center">
-          <Loader2Icon className="animate-spin" />
-          <h2 className="text-white">Loading...</h2>
+        <div className="absolute inset-0 z-50 backdrop-blur-sm bg-black/20 flex items-center justify-center">
+          <LoaderFourDemo />
         </div>
       )}
     </div>
