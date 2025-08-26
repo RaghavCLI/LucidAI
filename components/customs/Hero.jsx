@@ -36,11 +36,11 @@ function Hero() {
     router.push("/workspace/" + workspaceId);
   };
   return (
-    <div className="flex flex-col items-center mt-12 xl:mt-32 gap-2">
+    <div className="flex flex-col items-center mt-16 xl:mt-36 gap-4">
       <h2 className="text-4xl font-bold">{Lookup.HERO_HEADING}</h2>
       <p className="">{Lookup.HERO_DESC}</p>
 
-      <div className="relative rounded-xl max-w-xl w-full mt-3 p-[1px] bg-gradient-to-br from-white/30 via-white/10 to-transparent">
+      <div className="relative rounded-xl max-w-xl w-full mt-6 p-[1px] bg-gradient-to-br from-white/30 via-white/10 to-transparent">
         <div className="bg-black rounded-xl p-5 relative">
           <div className="flex gap-2">
             <textarea
@@ -60,7 +60,7 @@ function Hero() {
           </div>
         </div>
       </div>
-      <div className="flex mt-5 flex-wrap max-w-2xl items-center justify-center gap-3">
+      <div className="flex mt-8 flex-wrap max-w-2xl items-center justify-center gap-3">
         {Lookup?.SUGGSTIONS?.map((suggestion, index) => (
           <h2
             className="p-1 px-2 border rounded-full border-gray-600 font-extralight text-sm text-gray-400 hover:text-white cursor-pointer"

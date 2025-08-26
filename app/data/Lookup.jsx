@@ -9,7 +9,7 @@ export default {
     "Create Login Signup Screen",
   ],
   HERO_HEADING: "What do you want to build?",
-  HERO_DESC: "Prompt, run, edit, and deploy full-stack web apps.",
+  HERO_DESC: "Create stunning & websites by chatting with AI.",
   INPUT_PLACEHOLDER: "What you want to build?",
   SIGNIN_HEADING: "Continue With Bolt.New 2.0",
   SIGNIN_SUBHEADING:
