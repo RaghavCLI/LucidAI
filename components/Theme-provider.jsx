@@ -9,6 +9,8 @@ import { GoogleOAuthProvider } from "@react-oauth/google";
 import { useEffect } from "react";
 import { useConvex } from "convex/react";
 import { api } from "@/convex/_generated/api";
+import { SidebarProvider } from "@/components/ui/sidebar";
+import AppSideBar from "@/components/customs/AppSideBar";
 
 export function ThemeProvider(props) {
   const [messages, setMessages] = useState([]);
@@ -46,7 +48,10 @@ export function ThemeProvider(props) {
               disableTransitionOnChange={false}
               storageKey="lucidai-theme"
             >
-              {children}
+              <SidebarProvider>
+                <AppSideBar />
+                {children}
+              </SidebarProvider>
             </NextThemesProvider>
           </MessagesContext.Provider>
         </UserDetailContext.Provider>

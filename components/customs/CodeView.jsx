@@ -37,7 +37,7 @@ function CodeView() {
         ...workspaceData?.fileData,
       };
       setFiles(mergedFiles);
-      setLoading(false);
+      // Removed setLoading(false) from here since we want loading to be controlled by the API request
     }
   }, [workspaceData, id]);
 
@@ -51,22 +51,28 @@ function CodeView() {
   }, [messages]);
 
   const GenerateAiCode = async () => {
-    setLoading(true);
-    const userRequest = messages[messages.length - 1]?.content || "";
-    const PROMPT = `Create a React application that: ${userRequest}\n\n${prompt.CODE_GEN_PROMPT}`;
-    const result = await axios.post("/api/gen-ai-code", {
-      prompt: PROMPT,
-    });
-    console.log(result.data);
-    const AiResp = result.data;
+    try {
+      setLoading(true);
+      const userRequest = messages[messages.length - 1]?.content || "";
+      const PROMPT = `Create a React application that: ${userRequest}\n\n${prompt.CODE_GEN_PROMPT}`;
 
-    const mergedFiles = { ...Lookup.DEFAULT_FILE, ...AiResp?.files };
-    setFiles(mergedFiles);
-    await UpdateFiles({
-      workspaceId: id,
-      files: AiResp?.files,
-    });
-    setLoading(false);
+      const result = await axios.post("/api/gen-ai-code", {
+        prompt: PROMPT,
+      });
+
+      const AiResp = result.data;
+      const mergedFiles = { ...Lookup.DEFAULT_FILE, ...AiResp?.files };
+      setFiles(mergedFiles);
+
+      await UpdateFiles({
+        workspaceId: id,
+        files: AiResp?.files,
+      });
+    } catch (error) {
+      console.error("Error generating code:", error);
+    } finally {
+      setLoading(false);
+    }
   };
   return (
     <div className="relative">

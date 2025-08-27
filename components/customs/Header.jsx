@@ -1,15 +1,25 @@
 "use client";
 
-import React from "react";
+import React, { useContext } from "react";
 import { Button } from "../ui/button";
 import { UserDetailContext } from "@/context/UserDetailContext";
-import { useContext } from "react";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 
 function Header() {
   const { userDetail, setUserDetail } = useContext(UserDetailContext);
+  const pathname = usePathname();
+  const isWorkspace =
+    pathname === "/workspace" || pathname.startsWith("/workspace/");
+
   return (
-    <div className="pl-5 pr-4 py-3 flex justify-between items-center  backdrop-blur-sm ">
+    <div
+      className={`pl-5 pr-4 py-3 flex justify-between items-center backdrop-blur-sm relative${
+        isWorkspace
+          ? " border-b after:absolute after:bottom-0 after:left-0 after:right-0 after:h-[1px] after:bg-white/20"
+          : ""
+      }`}
+    >
       <Link href="/">
         <h1 className="text-2xl font-bold p-0">LucidAI</h1>
       </Link>
