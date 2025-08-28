@@ -14,7 +14,7 @@ function Header() {
 
   return (
     <div
-      className={`pl-5 pr-4 py-3 flex justify-between items-center backdrop-blur-sm relative${
+      className={`pl-5 pr-4 py-2 flex justify-between items-center backdrop-blur-sm relative${
         isWorkspace
           ? " border-b after:absolute after:bottom-0 after:left-0 after:right-0 after:h-[1px] after:bg-white/20"
           : ""

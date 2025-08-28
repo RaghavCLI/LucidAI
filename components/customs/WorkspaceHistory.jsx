@@ -23,13 +23,15 @@ function WorkspaceHistory() {
     setWorkspaceList(result);
   };
   return (
-    <div>
-      <h2>your chats</h2>
-      <div>
+    <div className="flex flex-col">
+      <h2 className="mb-2 text-xs font-semibold uppercase tracking-wider text-gray-500">
+        your chats
+      </h2>
+      <div className="flex flex-col gap-1">
         {workspaceList &&
           workspaceList?.map((workspace, index) => (
             <Link href={"/workspace/" + workspace?._id} key={index}>
-              <button className="text-sm text-gray-400 mt-2 font-light px-2 py-1 rounded transition-colors hover:bg-gray-200 hover:text-gray-600 border-none cursor-pointer w-full text-left">
+              <button className="text-sm text-gray-400 font-light px-2 py-1 rounded transition-colors hover:bg-gray-200 hover:text-gray-600 border-none cursor-pointer w-full text-left truncate">
                 {workspace?.messages[0]?.content}
               </button>
             </Link>

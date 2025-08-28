@@ -78,7 +78,7 @@ function ChatView() {
   return (
     <div className="relative h-[85vh] flex flex-row pl-11">
       {/* Sticky avatar column */}
-      <div className="fixed left-0 top-0 h-full flex flex-col items-center justify-end pl-2.5 py-3 z-20 w-10">
+      <div className="fixed left-0 top-0 h-full flex flex-col items-center justify-end pl-2.5 py-3 pb-10 z-20 w-10">
         <div className="ml-px flex items-center">
           <button className="bg-transparent cursor-default flex flex-col items-center p-0 m-0">
             <div className="flex select-none items-center justify-center w-6 h-6 overflow-hidden rounded-full shrink-0 bg-white">
@@ -112,12 +112,12 @@ function ChatView() {
       </div>
       {/* Main chat area */}
       <div className="flex-1 flex flex-col">
-        <div className="flex-1 flex-col gap-6 overflow-y-scroll pt-2 mx-0 scrollbar-hide">
+        <div className="flex-1 flex-col gap-6 overflow-y-scroll pt-0 mx-0 scrollbar-hide">
           {Array.isArray(messages) &&
             messages.map((msg, index) => (
               <div
                 key={index}
-                className="p-3 rounded-lg mb-2 flex gap-3 items-start"
+                className="p-3 rounded-md mb-2 flex gap-3 items-start"
                 style={
                   msg?.role !== "ai"
                     ? { backgroundColor: colors.CHAT_BACKGROUND }

@@ -18,11 +18,11 @@ function AppSideBar() {
       <Sidebar>
         <SidebarHeader>
           <Link href="/">
-            <h1 className="text-2xl font-bold p-0 pl-5">LucidAI</h1>
+            <h1 className="text-2xl font-bold p-0 pl-4">LucidAI</h1>
           </Link>
         </SidebarHeader>
 
-        <SidebarContent className="p-5">
+        <SidebarContent className="p-5 flex flex-col h-full">
           <Button
             variant="outline"
             className="w-full flex items-center justify-center gap-2 text-blue-600 border-blue-600 hover:bg-blue-50 font-medium transition-all duration-200 mb-4"
@@ -57,7 +57,10 @@ function AppSideBar() {
             <span>Start New Chat</span>
           </Button>
           <SidebarGroup />
-          <WorkspaceHistory />
+          {/* Scrollable chat list area */}
+          <div className="flex-1 min-h-0 overflow-y-auto custom-scrollbar pr-1">
+            <WorkspaceHistory />
+          </div>
           <SidebarGroup />
         </SidebarContent>
         <Footer />
