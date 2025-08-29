@@ -5,7 +5,7 @@ function InfoFooter() {
     <div className="bg-[#18181b] p-5 rounded-lg mt-4">
       <div style={{ display: "flex", alignItems: "center" }}>
         <img
-          src="/avatar-placeholder.png"
+          src="/pfp.jpg"
           alt="User Avatar"
           style={{
             width: "56px",

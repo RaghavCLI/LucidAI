@@ -11,11 +11,11 @@ export default {
   HERO_HEADING: "What do you want to build?",
   HERO_DESC: "Create stunning & websites by chatting with AI.",
   INPUT_PLACEHOLDER: "What you want to build?",
-  SIGNIN_HEADING: "Continue With Bolt.New 2.0",
+  SIGNIN_HEADING: "Continue With LucidAI",
   SIGNIN_SUBHEADING:
-    "To use Bolt you must log into an existing account or create one.",
+    "To use LucidAI you must log into an existing account or create one.",
   SIGNIN_AGREEMENT_TEXT:
-    "By using lucidAI, you agree to the collection of usage data for analytics.",
+    "By using LucidAI, you agree to the collection of usage data for analytics.",
 
   DEFAULT_FILE: {
     "/public/index.html": {
@@ -43,7 +43,7 @@ export default {
             /** @type {import('tailwindcss').Config} */
 module.exports = {
   content: [
-    "./src/**/*.{js,jsx,ts,tsx}",
+    "./src/**/*.{js,jsx,}",
   ],
   theme: {
     extend: {},

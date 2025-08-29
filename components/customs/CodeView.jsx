@@ -1,5 +1,5 @@
 "use client";
-import React, { useContext, useEffect } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import {
   SandpackProvider,
   SandpackLayout,
@@ -7,7 +7,6 @@ import {
   SandpackPreview,
   SandpackFileExplorer,
 } from "@codesandbox/sandpack-react";
-import { useState } from "react";
 import Lookup from "@/app/data/Lookup";
 import { MessagesContext } from "@/context/MessagesContext";
 import axios from "axios";
@@ -44,7 +43,7 @@ function CodeView() {
   useEffect(() => {
     if (messages?.length > 0) {
       const role = messages[messages?.length - 1].role;
-      if (role === "msg") {
+      if (role == "msg") {
         GenerateAiCode();
       }
     }
@@ -53,20 +52,20 @@ function CodeView() {
   const GenerateAiCode = async () => {
     try {
       setLoading(true);
-      const userRequest = messages[messages.length - 1]?.content || "";
-      const PROMPT = `Create a React application that: ${userRequest}\n\n${prompt.CODE_GEN_PROMPT}`;
+      const PROMPT = JSON.stringify(messages) + " " + prompt.CODE_GEN_PROMPT;
 
       const result = await axios.post("/api/gen-ai-code", {
         prompt: PROMPT,
       });
+      console.log("AI Response:", result.data);
 
-      const AiResp = result.data;
-      const mergedFiles = { ...Lookup.DEFAULT_FILE, ...AiResp?.files };
+      const aiResp = result.data;
+      const mergedFiles = { ...Lookup.DEFAULT_FILE, ...aiResp?.files };
       setFiles(mergedFiles);
 
       await UpdateFiles({
         workspaceId: id,
-        files: AiResp?.files,
+        files: aiResp?.files,
       });
     } catch (error) {
       console.error("Error generating code:", error);
