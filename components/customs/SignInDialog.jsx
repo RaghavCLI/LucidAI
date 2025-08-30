@@ -13,12 +13,14 @@ import axios from "axios";
 import { useContext } from "react";
 import { UserDetailContext } from "@/context/UserDetailContext";
 import { api } from "@/convex/_generated/api";
-import { useMutation } from "convex/react";
+import { useConvex } from "convex/react";
 import uuid4 from "uuid4";
+import { useMutation } from "convex/react";
 
 function SignInDialog({ openDialog, CloseDialog }) {
   const { userDetail, setUserDetail } = useContext(UserDetailContext);
   const CreateUser = useMutation(api.users.CreateUser);
+  const convex = useConvex();
 
   const googleLogin = useGoogleLogin({
     onSuccess: async (tokenResponse) => {
@@ -30,20 +32,41 @@ function SignInDialog({ openDialog, CloseDialog }) {
 
       console.log(userInfo);
       const user = userInfo.data;
-      await CreateUser({
-        name: user?.name,
-        email: user?.email,
-        picture: user?.picture,
-        uid: uuid4(),
-      });
+      let userData;
 
-      if (typeof windo != undefined) {
-        localStorage.setItem("user", JSON.stringify(user));
+      try {
+        // Check if user already exists
+        const existingUser = await convex.query(api.users.getUser, {
+          email: user.email,
+        });
+        if (existingUser) {
+          userData = existingUser;
+        } else {
+          // Create new user
+          await CreateUser({
+            name: user?.name,
+            email: user?.email,
+            picture: user?.picture,
+            uid: uuid4(),
+          });
+          // Fetch the newly created user
+          userData = await convex.query(api.users.getUser, {
+            email: user.email,
+          });
+        }
+      } catch (error) {
+        console.error("Error handling user:", error);
+        // Fallback to Google data if DB operations fail
+        userData = user;
       }
 
-      setUserDetail(userInfo?.data);
+      if (typeof window !== "undefined") {
+        localStorage.setItem("user", JSON.stringify(userData));
+      }
 
-      // save this inside the Database
+      setUserDetail(userData);
+
+      // Close the dialog
       CloseDialog(false);
     },
     onError: (errorResponse) => console.log(errorResponse),

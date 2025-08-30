@@ -74,9 +74,9 @@ function CodeView() {
     }
   };
   return (
-    <div className="relative">
-      <div className="bg-[#181818] w-full p-2 border">
-        <div className="flex items-center flex-wrap shrink-0 bg-black p-1 w-[140px] gap-3">
+    <div className="relative flex w-full">
+      <div className="bg-[#181818] border p-2 w-[900px] min-w-[900px] max-w-[900px] mx-auto">
+        <div className="flex items-center flex-wrap">
           <h2
             onClick={() => setActiveTab("code")}
             className={`text-sm cursor-pointer ${activeTab == "code" && "text-blue-500 bg-opacity-25 p-1 px-2 rounded-full"}`}
@@ -90,42 +90,43 @@ function CodeView() {
             Preview
           </h2>
         </div>
+        <SandpackProvider
+          files={files}
+          template="react"
+          theme={"dark"}
+          customSetup={{
+            dependencies: {
+              ...Lookup.DEPENDANCY,
+            },
+          }}
+          options={{
+            externalResources: ["https://cdn.tailwindcss.com"],
+          }}
+        >
+          <SandpackLayout style={{ width: "100%" }}>
+            {activeTab == "code" ? (
+              <>
+                <SandpackFileExplorer
+                  style={{ height: "75vh", width: "100%" }}
+                />
+                <SandpackCodeEditor style={{ height: "75vh", width: "100%" }} />
+              </>
+            ) : (
+              <>
+                <SandpackPreview
+                  style={{ height: "75vh", width: "100%" }}
+                  showNavigator={true}
+                />
+              </>
+            )}
+          </SandpackLayout>
+        </SandpackProvider>
+        {(loading || !workspaceData) && (
+          <div className="absolute inset-0 z-50 backdrop-blur-sm bg-black/20 flex items-center justify-center">
+            <LoaderFourDemo />
+          </div>
+        )}
       </div>
-      <SandpackProvider
-        files={files}
-        template="react"
-        theme={"dark"}
-        customSetup={{
-          dependencies: {
-            ...Lookup.DEPENDANCY,
-          },
-        }}
-        options={{
-          externalResources: ["https://cdn.tailwindcss.com"],
-        }}
-      >
-        <SandpackLayout>
-          {activeTab == "code" ? (
-            <>
-              <SandpackFileExplorer style={{ height: "75vh" }} />
-              <SandpackCodeEditor style={{ height: "75vh" }} />
-            </>
-          ) : (
-            <>
-              <SandpackPreview
-                style={{ height: "75vh" }}
-                showNavigator={true}
-              />
-            </>
-          )}
-        </SandpackLayout>
-      </SandpackProvider>
-
-      {(loading || !workspaceData) && (
-        <div className="absolute inset-0 z-50 backdrop-blur-sm bg-black/20 flex items-center justify-center">
-          <LoaderFourDemo />
-        </div>
-      )}
     </div>
   );
 }

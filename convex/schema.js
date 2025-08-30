@@ -11,6 +11,6 @@ export default defineSchema({
   workspace: defineTable({
     messages: v.any(),
     fileData: v.optional(v.any()),
-    user: v.id("users")
+    user: v.id('users'),
   })
 });

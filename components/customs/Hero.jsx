@@ -28,10 +28,16 @@ function Hero() {
     };
     setMessages(msg);
 
+    if (!userDetail || !userDetail._id) {
+      setOpenDialog(true); // ask the user to sign in
+      return; // stop execution
+    }
+
     const workspaceId = await CreateWorkspace({
-      user: userDetail._id,
+      user: userDetail._id, // must be a valid Convex user ID
       messages: [msg],
     });
+
     console.log("Workspace created with ID:", workspaceId);
     router.push("/workspace/" + workspaceId);
   };
