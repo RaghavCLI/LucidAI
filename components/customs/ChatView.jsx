@@ -16,6 +16,13 @@ import colors from "@/app/data/Colors";
 import { useMutation } from "convex/react";
 import ReactMarkdown from "react-markdown";
 
+export const countToken = (inputText) => {
+  return inputText
+    .trim()
+    .split(/\s+/)
+    .filter((word) => word).length;
+};
+
 function ChatView() {
   const { id } = useParams();
   const convex = useConvex();
@@ -24,6 +31,7 @@ function ChatView() {
   const [userInput, setUserInput] = useState("");
   const [loading, setLoading] = useState(false);
   const UpdateMessages = useMutation(api.workspace.UpdateMessages);
+  const UpdateToken = useMutation(api.users.UpdateToken);
 
   useEffect(() => {
     id && GetWorkspaceData();
@@ -59,6 +67,14 @@ function ChatView() {
         await UpdateMessages({
           messages: [...messages, { role: "ai", content: result.data.result }],
           workspaceId: id,
+        });
+        const token =
+          Number(userDetail?.token) -
+          Number(countToken(JSON.stringify(result.data.result)));
+        // update into db
+        await UpdateToken({
+          userId: userDetail?._id,
+          token: token,
         });
         setLoading(false);
       }

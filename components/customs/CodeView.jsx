@@ -16,9 +16,12 @@ import { useParams } from "next/navigation";
 import { api } from "@/convex/_generated/api";
 import { useQuery, useConvex } from "convex/react";
 import LoaderFourDemo from "@/components/ui/loader-four-demo";
+import { countToken } from "./ChatView";
+import { UserDetailContext } from "@/context/UserDetailContext";
 
 function CodeView() {
   const { id } = useParams();
+  const { userDetail, setuserDetail } = useContext(UserDetailContext);
   const [activeTab, setActiveTab] = useState("code");
   const [files, setFiles] = useState(Lookup?.DEFAULT_FILE);
   const { messages, setMessages } = useContext(MessagesContext);
@@ -28,6 +31,8 @@ function CodeView() {
   const workspaceData = useQuery(api.workspace.GetWorkspace, {
     workspaceId: id,
   });
+
+  const UpdateToken = useMutation(api.users.UpdateToken);
 
   useEffect(() => {
     if (workspaceData) {
@@ -66,6 +71,14 @@ function CodeView() {
       await UpdateFiles({
         workspaceId: id,
         files: aiResp?.files,
+      });
+
+      const token =
+        Number(userDetail?.token) - Number(countToken(JSON.stringify(aiResp)));
+      // update into db
+      await UpdateToken({
+        userId: userDetail?._id,
+        token: token,
       });
     } catch (error) {
       console.error("Error generating code:", error);
