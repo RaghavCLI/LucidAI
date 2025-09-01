@@ -14,8 +14,8 @@ import AppSideBar from "@/components/customs/AppSideBar";
 import { PayPalScriptProvider } from "@paypal/react-paypal-js";
 
 export function ThemeProvider(props) {
-  const [messages, setMessages] = useState([]);
-  const [userDetail, setUserDetail] = useState(null);
+  const [messages, setMessages] = useState();
+  const [userDetail, setUserDetail] = useState();
   const convex = useConvex();
   const { children, ...rest } = props;
 

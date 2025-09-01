@@ -61,10 +61,9 @@ function ChatView() {
       const PROMPT = JSON.stringify(messages) + prompt.CHAT_PROMPT;
       const result = await axios.post("/api/ai-chat", { prompt: PROMPT });
       if (result.data.result) {
-        const token =
+        let token =
           Number(userDetail?.token) -
           Number(countToken(JSON.stringify(result.data.result)));
-
         setMessages((prev) => [
           ...prev,
           { role: "ai", content: result.data.result },
