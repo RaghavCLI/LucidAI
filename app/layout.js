@@ -3,6 +3,7 @@ import "./globals.css";
 import { ThemeProvider } from "../components/Theme-provider";
 import ConvexClientProvider from "./ConvexClientProvider";
 import Header from "../components/customs/Header";
+import { Toaster } from "sonner";
 
 
 const spaceGrotesk = Space_Grotesk({
@@ -50,6 +51,7 @@ export default function RootLayout({ children }) {
               {/* Page content */}
               <main>
                 {children}
+                <Toaster />
               </main>
             </div>
           </ThemeProvider>

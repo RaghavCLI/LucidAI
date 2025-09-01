@@ -15,6 +15,7 @@ import { LoaderFive } from "@/components/ui/loader";
 import colors from "@/app/data/Colors";
 import { useMutation } from "convex/react";
 import ReactMarkdown from "react-markdown";
+import { toast } from "sonner";
 
 export const countToken = (inputText) => {
   return inputText
@@ -64,6 +65,10 @@ function ChatView() {
           ...prev,
           { role: "ai", content: result.data.result },
         ]);
+        setuserDetail((prev) => ({
+          ...prev,
+          token: token,
+        }));
         await UpdateMessages({
           messages: [...messages, { role: "ai", content: result.data.result }],
           workspaceId: id,
@@ -86,7 +91,10 @@ function ChatView() {
 
   // Send user message
   const onGenerate = async (input) => {
-    if (!input?.trim()) return;
+    if (userDetail?.token < 10) {
+      toast("Not enough tokens");
+      return;
+    }
     setMessages((prev) => [...prev, { role: "msg", content: input }]);
     setUserInput("");
   };

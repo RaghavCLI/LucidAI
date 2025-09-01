@@ -80,6 +80,10 @@ function CodeView() {
         userId: userDetail?._id,
         token: token,
       });
+      setuserDetail((prev) => ({
+        ...prev,
+        token: token,
+      }));
     } catch (error) {
       console.error("Error generating code:", error);
     } finally {

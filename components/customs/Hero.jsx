@@ -9,6 +9,7 @@ import SignInDialog from "./SignInDialog";
 import { useRouter } from "next/navigation";
 import { useMutation } from "convex/react";
 import { api } from "@/convex/_generated/api";
+import { toast } from "sonner";
 
 function Hero() {
   const [userInput, setUserInput] = useState();
@@ -20,6 +21,10 @@ function Hero() {
   const onGenerate = async (input) => {
     if (!userDetail?.name) {
       setOpenDialog(true);
+      return;
+    }
+    if (userDetail?.token < 10) {
+      toast("Not enough tokens");
       return;
     }
     const msg = {
