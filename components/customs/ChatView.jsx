@@ -27,7 +27,7 @@ export const countToken = (inputText) => {
 function ChatView() {
   const { id } = useParams();
   const convex = useConvex();
-  const { userDetail, setuserDetail } = useContext(UserDetailContext);
+  const { userDetail, setUserDetail } = useContext(UserDetailContext);
   const { messages = [], setMessages } = useContext(MessagesContext);
   const [userInput, setUserInput] = useState("");
   const [loading, setLoading] = useState(false);
@@ -61,11 +61,15 @@ function ChatView() {
       const PROMPT = JSON.stringify(messages) + prompt.CHAT_PROMPT;
       const result = await axios.post("/api/ai-chat", { prompt: PROMPT });
       if (result.data.result) {
+        const token =
+          Number(userDetail?.token) -
+          Number(countToken(JSON.stringify(result.data.result)));
+
         setMessages((prev) => [
           ...prev,
           { role: "ai", content: result.data.result },
         ]);
-        setuserDetail((prev) => ({
+        setUserDetail((prev) => ({
           ...prev,
           token: token,
         }));
@@ -73,9 +77,6 @@ function ChatView() {
           messages: [...messages, { role: "ai", content: result.data.result }],
           workspaceId: id,
         });
-        const token =
-          Number(userDetail?.token) -
-          Number(countToken(JSON.stringify(result.data.result)));
         // update into db
         await UpdateToken({
           userId: userDetail?._id,

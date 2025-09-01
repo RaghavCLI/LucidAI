@@ -21,7 +21,7 @@ import { UserDetailContext } from "@/context/UserDetailContext";
 
 function CodeView() {
   const { id } = useParams();
-  const { userDetail, setuserDetail } = useContext(UserDetailContext);
+  const { userDetail, setUserDetail } = useContext(UserDetailContext);
   const [activeTab, setActiveTab] = useState("code");
   const [files, setFiles] = useState(Lookup?.DEFAULT_FILE);
   const { messages, setMessages } = useContext(MessagesContext);
@@ -80,7 +80,7 @@ function CodeView() {
         userId: userDetail?._id,
         token: token,
       });
-      setuserDetail((prev) => ({
+      setUserDetail((prev) => ({
         ...prev,
         token: token,
       }));
