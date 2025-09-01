@@ -4,15 +4,14 @@ import React from "react";
 
 function Page() {
   return (
-    <div className=" p-3 pt-4 py-1">
-      <main className="flex-1 flex flex-col md:flex-row gap-8">
-        <div className=" flex-1 md:max-w-md">
-          <ChatView />
-        </div>
-        <div className="flex-1">
+    <div className="px-3 pt-3 pr-5 mt-3 h-full">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-2 ml-0">
+        <ChatView />
+
+        <div className="col-span-2 pb-0 p-0">
           <CodeView />
         </div>
-      </main>
+      </div>
     </div>
   );
 }

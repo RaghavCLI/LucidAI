@@ -92,12 +92,12 @@ function ChatView() {
   };
 
   return (
-    <div className="relative h-[85vh] flex flex-row pl-11">
+    <div className="relative h-[85vh] flex flex-row pl-9 pr-1">
       {/* Sticky avatar column */}
       <div className="fixed left-0 top-0 h-full flex flex-col items-center justify-end pl-2.5 py-3 pb-10 z-20 w-10">
         <div className="ml-px flex items-center">
-          <button className="bg-transparent cursor-default flex flex-col items-center p-0 m-0">
-            <div className="flex select-none items-center justify-center w-6 h-6 overflow-hidden rounded-full shrink-0 bg-white">
+          <button className="bg-transparent cursor-default flex flex-col items-center p-0 m-0 group">
+            <div className="flex select-none items-center justify-center w-7 h-7 overflow-hidden rounded-full shrink-0 bg-white ring-2 ring-gray-700 group-hover:ring-gray-600 transition-all duration-200">
               {userDetail && (
                 <Image
                   src={userDetail?.picture}
@@ -110,15 +110,15 @@ function ChatView() {
             </div>
             <svg
               xmlns="http://www.w3.org/2000/svg"
-              width="24"
-              height="24"
+              width="20"
+              height="20"
               viewBox="0 0 24 24"
               fill="none"
               stroke="currentColor"
               strokeWidth="2"
               strokeLinecap="round"
               strokeLinejoin="round"
-              className="lucide lucide-panel-left-icon lucide-panel-left mt-2 text-gray-400"
+              className="lucide lucide-panel-left-icon lucide-panel-left mt-3 text-gray-500 group-hover:text-gray-400 transition-colors duration-200"
             >
               <rect width="18" height="18" x="3" y="3" rx="2" />
               <path d="M9 3v18" />
@@ -128,12 +128,14 @@ function ChatView() {
       </div>
       {/* Main chat area */}
       <div className="flex-1 flex flex-col">
-        <div className="flex-1 flex-col gap-6 overflow-y-scroll pt-0 mx-0 scrollbar-hide">
+        <div className="flex-1 flex-col gap-4 overflow-y-auto mx-0 scrollbar-hide">
           {Array.isArray(messages) &&
             messages.map((msg, index) => (
               <div
                 key={index}
-                className="p-3 rounded-md mb-2 flex gap-3 items-start"
+                className={`p-4 rounded-lg mb-3 flex gap-4 items-start group hover:bg-gray-800/20 transition-colors duration-200 ${
+                  msg?.role === "ai" ? "bg-gray-800/10" : ""
+                }`}
                 style={
                   msg?.role !== "ai"
                     ? { backgroundColor: colors.CHAT_BACKGROUND }
@@ -144,42 +146,87 @@ function ChatView() {
                   <Image
                     src={userDetail?.picture}
                     alt="user-avatar"
-                    width={35}
-                    height={35}
-                    className="rounded-full"
+                    width={36}
+                    height={36}
+                    className="rounded-full ring-1 ring-gray-600 flex-shrink-0"
                   />
                 )}
-                <div>
-                  <ReactMarkdown>{msg.content}</ReactMarkdown>
+                {msg?.role === "ai" && (
+                  <div className="w-9 h-9 rounded-full bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center flex-shrink-0">
+                    <span className="text-white text-sm font-semibold">AI</span>
+                  </div>
+                )}
+                <div className="flex-1 min-w-0">
+                  <div className="prose prose-invert prose-sm max-w-none">
+                    <ReactMarkdown
+                      components={{
+                        p: ({ children }) => (
+                          <p className="mb-2 last:mb-0 leading-relaxed">
+                            {children}
+                          </p>
+                        ),
+                        code: ({ children }) => (
+                          <code className="bg-gray-700 px-2 py-1 rounded text-sm font-mono">
+                            {children}
+                          </code>
+                        ),
+                        pre: ({ children }) => (
+                          <pre className="bg-gray-800 p-3 rounded-lg overflow-x-auto text-sm">
+                            {children}
+                          </pre>
+                        ),
+                      }}
+                    >
+                      {msg.content}
+                    </ReactMarkdown>
+                  </div>
                 </div>
               </div>
             ))}
           {loading && (
-            <div className="p-3">
-              <LoaderFive text="Generating AI Response..." />
+            <div className="p-4 mb-3">
+              <div className="flex gap-4 items-start">
+                <div className="w-9 h-9 rounded-full bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center flex-shrink-0 animate-pulse">
+                  <span className="text-white text-sm font-semibold">AI</span>
+                </div>
+                <div className="flex-1">
+                  <div className="bg-gray-800/50 rounded-lg p-3 border border-gray-700/50">
+                    <LoaderFive text="Generating AI Response..." />
+                  </div>
+                </div>
+              </div>
             </div>
           )}
         </div>
         <div>
           {/* Message Input Area */}
-          <div className="relative rounded-sm max-w-xl w-full mt-3 p-[1px] bg-gradient-to-br from-white/30 via-white/10 to-transparent">
-            <div className="bg-black rounded-xl p-5 relative">
-              <div className="flex gap-2">
+          <div className="relative rounded-sm max-w-xl w-full mt-4 p-[1px] bg-gradient-to-br from-white/30 via-white/10 to-transparent">
+            <div className="bg-black/80 backdrop-blur-sm rounded-xl p-4 relative border border-white/5">
+              <div className="flex gap-3 items-end">
                 <textarea
                   value={userInput}
                   onChange={(event) => setUserInput(event.target.value)}
                   placeholder={Lookup.INPUT_PLACEHOLDER}
-                  className="outline-none bg-transparent w-full h-20 max-h-40 resize"
+                  className="outline-none bg-transparent w-full h-20 max-h-40 resize-none text-gray-100 placeholder-gray-400 text-sm leading-relaxed"
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter" && !e.shiftKey) {
+                      e.preventDefault();
+                      onGenerate(userInput);
+                    }
+                  }}
                 />
                 {userInput && (
-                  <ArrowRight
+                  <button
                     onClick={() => onGenerate(userInput)}
-                    className="p-2 h-9 w-9 text-white/70 hover:text-white rounded-md cursor-pointer hover:bg-white/10 transition-all duration-200"
-                  />
+                    className="p-2 h-9 w-9 text-white/70 hover:text-white rounded-lg cursor-pointer hover:bg-white/10 transition-all duration-200 flex items-center justify-center group"
+                  >
+                    <ArrowRight className="h-5 w-5 group-hover:translate-x-0.5 transition-transform duration-200" />
+                  </button>
                 )}
               </div>
-              <div>
-                <Link className=" h-5 w-5" />
+              <div className="flex items-center justify-between mt-3 text-xs text-gray-500">
+                <span>Press Enter to send, Shift+Enter for new line</span>
+                <Link className="h-4 w-4 opacity-50" />
               </div>
             </div>
           </div>

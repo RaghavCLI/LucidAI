@@ -88,20 +88,28 @@ function CodeView() {
   };
   return (
     <div className="relative flex w-full">
-      <div className="bg-[#181818] border p-2 w-[900px] min-w-[900px] max-w-[900px] mx-auto">
-        <div className="flex items-center flex-wrap">
-          <h2
+      <div className="bg-[#181818] border p-1 w-full max-w-[1000px] mx-auto">
+        <div className="flex items-center gap-1 mb-4 pb-2 border-b border-gray-700">
+          <button
             onClick={() => setActiveTab("code")}
-            className={`text-sm cursor-pointer ${activeTab == "code" && "text-blue-500 bg-opacity-25 p-1 px-2 rounded-full"}`}
+            className={`px-4 py-2 text-sm font-medium rounded-lg transition-all duration-200 ${
+              activeTab === "code"
+                ? "text-blue-400 bg-blue-500/10 border border-blue-500/20 shadow-sm"
+                : "text-gray-400 hover:text-gray-300 hover:bg-gray-700/50"
+            }`}
           >
             Code
-          </h2>
-          <h2
+          </button>
+          <button
             onClick={() => setActiveTab("preview")}
-            className={`text-sm cursor-pointer ${activeTab == "preview" && "text-blue-500 bg-opacity-25 p-1 px-2 rounded-full"}`}
+            className={`px-4 py-2 text-sm font-medium rounded-lg transition-all duration-200 ${
+              activeTab === "preview"
+                ? "text-blue-400 bg-blue-500/10 border border-blue-500/20 shadow-sm"
+                : "text-gray-400 hover:text-gray-300 hover:bg-gray-700/50"
+            }`}
           >
             Preview
-          </h2>
+          </button>
         </div>
         <SandpackProvider
           files={files}
