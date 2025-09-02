@@ -28,7 +28,6 @@ function SignInDialog({ openDialog, CloseDialog }) {
     onSuccess: async (tokenResponse) => {
       setIsLoading(true);
       try {
-        console.log(tokenResponse);
         const userInfo = await axios.get(
           "https://www.googleapis.com/oauth2/v3/userinfo",
           {
@@ -36,7 +35,6 @@ function SignInDialog({ openDialog, CloseDialog }) {
           }
         );
 
-        console.log(userInfo);
         const user = userInfo.data;
         let userData;
 
@@ -75,7 +73,6 @@ function SignInDialog({ openDialog, CloseDialog }) {
       }
     },
     onError: (errorResponse) => {
-      console.log(errorResponse);
       setIsLoading(false);
     },
   });

@@ -19,7 +19,5 @@ export const clearAllData = internalMutation({
     for (const workspace of workspaces) {
       await ctx.db.delete(workspace._id);
     }
-    
-    console.log("All data cleared");
   },
 });

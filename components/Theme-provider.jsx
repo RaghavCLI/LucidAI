@@ -34,7 +34,6 @@ export function ThemeProvider(props) {
             email: user.email,
           });
           setUserDetail(result);
-          console.log(result);
         }
       }
     }

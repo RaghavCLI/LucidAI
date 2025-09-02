@@ -11,7 +11,6 @@ export const CreateUser=mutation({
     handler:async(ctx,args)=>{
         //if user already exists
         const user = await ctx.db.query('users').filter((q) => q.eq(q.field('email'), args.email)).collect();
-        console.log(user);
 
         // if not, create a new user
         if(user.length===0){
@@ -22,7 +21,6 @@ export const CreateUser=mutation({
                 uid:args.uid,
                 token: 50000
             })
-            console.log(result);
         }
     }
 

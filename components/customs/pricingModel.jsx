@@ -13,7 +13,6 @@ function PricingModel() {
   const [selectedOption, setSelectedOption] = useState();
   const onPaymentSuccess = async (pricing) => {
     const token = userDetail?.token + Number(selectedOption?.value);
-    console.log(token);
     await UpdateToken({
       token: token,
       userId: userDetail?._id,
@@ -43,7 +42,7 @@ function PricingModel() {
             <PayPalButtons
               disabled={!userDetail}
               onApprove={() => onPaymentSuccess()}
-              onCancel={() => console.log("Payment cancelled.")}
+              onCancel={() => {}}
               style={{ layout: "horizontal" }}
               createOrder={(data, actions) => {
                 return actions.order.create({

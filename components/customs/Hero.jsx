@@ -43,7 +43,6 @@ function Hero() {
       messages: [msg],
     });
 
-    console.log("Workspace created with ID:", workspaceId);
     router.push("/workspace/" + workspaceId);
   };
   return (
