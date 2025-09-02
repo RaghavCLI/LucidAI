@@ -1,7 +1,7 @@
 "use client";
 
 import Lookup from "@/app/data/Lookup";
-import { ArrowRight, Link } from "lucide-react";
+import { ArrowRight, Link, Loader2 } from "lucide-react";
 import React, { useState, useContext } from "react";
 import { MessagesContext } from "../../context/MessagesContext";
 import { UserDetailContext } from "../../context/UserDetailContext";
@@ -13,6 +13,7 @@ import { toast } from "sonner";
 
 function Hero() {
   const [userInput, setUserInput] = useState();
+  const [isLoading, setIsLoading] = useState(false);
   const { messages, setMessages } = useContext(MessagesContext);
   const { userDetail, setUserDetail } = useContext(UserDetailContext);
   const [openDialog, setOpenDialog] = useState(false);
@@ -27,23 +28,36 @@ function Hero() {
       toast("Not enough tokens");
       return;
     }
-    const msg = {
-      role: "msg",
-      content: input,
-    };
-    setMessages(msg);
 
-    if (!userDetail || !userDetail._id) {
-      setOpenDialog(true); // ask the user to sign in
-      return; // stop execution
+    setIsLoading(true);
+
+    try {
+      const msg = {
+        role: "msg",
+        content: input,
+      };
+      setMessages(msg);
+
+      if (!userDetail || !userDetail._id) {
+        setOpenDialog(true); // ask the user to sign in
+        return; // stop execution
+      }
+
+      const workspaceId = await CreateWorkspace({
+        user: userDetail._id, // must be a valid Convex user ID
+        messages: [msg],
+      });
+
+      // Clear the input after successful generation
+      setUserInput("");
+
+      router.push("/workspace/" + workspaceId);
+    } catch (error) {
+      console.error("Error generating workspace:", error);
+      toast("Failed to create workspace. Please try again.");
+    } finally {
+      setIsLoading(false);
     }
-
-    const workspaceId = await CreateWorkspace({
-      user: userDetail._id, // must be a valid Convex user ID
-      messages: [msg],
-    });
-
-    router.push("/workspace/" + workspaceId);
   };
   return (
     <div className="flex flex-col items-center min-h-[calc(100vh-5rem)] md:min-h-0 md:h-auto relative">
@@ -64,15 +78,31 @@ function Hero() {
               <div className="flex gap-3">
                 <textarea
                   onChange={(event) => setUserInput(event.target.value)}
+                  onKeyDown={(event) => {
+                    if (
+                      event.key === "Enter" &&
+                      !event.shiftKey &&
+                      userInput.trim() &&
+                      !isLoading
+                    ) {
+                      event.preventDefault();
+                      onGenerate(userInput);
+                    }
+                  }}
                   placeholder={Lookup.INPUT_PLACEHOLDER}
                   className="outline-none bg-transparent w-full h-24 md:h-32 max-h-50 resize-none md:resize text-[15px] placeholder:text-gray-500/80 leading-relaxed"
                 />
                 {userInput && (
                   <button
                     onClick={() => onGenerate(userInput)}
-                    className="flex-shrink-0 group p-2 h-9 w-9 flex items-center justify-center rounded-lg bg-white/5 hover:bg-white/10 transition-all duration-200"
+                    disabled={isLoading}
+                    className="flex-shrink-0 group p-2 h-9 w-9 flex items-center justify-center rounded-lg bg-white/5 hover:bg-white/10 disabled:opacity-50 disabled:cursor-not-allowed transition-all duration-200"
                   >
-                    <ArrowRight className="h-5 w-5 text-white/70 group-hover:text-white/90 transition-colors" />
+                    {isLoading ? (
+                      <Loader2 className="h-5 w-5 text-white/70 animate-spin" />
+                    ) : (
+                      <ArrowRight className="h-5 w-5 text-white/70 group-hover:text-white/90 transition-colors" />
+                    )}
                   </button>
                 )}
               </div>
