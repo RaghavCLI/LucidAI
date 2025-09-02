@@ -10,7 +10,7 @@ import Lookup from "@/app/data/Lookup";
 import { ArrowRight, Link } from "lucide-react";
 import { useState } from "react";
 import axios from "axios";
-import prompt from "@/app/data/Prompt";
+import prompt from "@/app/data/prompt";
 import { LoaderFive } from "@/components/ui/loader";
 import colors from "@/app/data/Colors";
 import { useMutation } from "convex/react";
