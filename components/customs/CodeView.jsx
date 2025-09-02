@@ -10,7 +10,7 @@ import {
 import Lookup from "@/app/data/Lookup";
 import { MessagesContext } from "@/context/MessagesContext";
 import axios from "axios";
-import prompt from "@/app/data/prompt";
+import prompt from "../../app/data/prompt";
 import { useMutation } from "convex/react";
 import { useParams } from "next/navigation";
 import { api } from "@/convex/_generated/api";
