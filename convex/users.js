@@ -50,3 +50,13 @@ export const UpdateToken=mutation({
         return result;
     }
 })
+
+export const DeleteUser=mutation({
+    args:{
+        userId:v.id('users')
+    },
+    handler:async(ctx,args)=>{
+        const result = await ctx.db.delete(args.userId);
+        return result;
+    }
+})
