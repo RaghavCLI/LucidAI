@@ -65,3 +65,13 @@ export const GetAllWorkspace = query({
     return result;
   },
 });
+
+export const DeleteWorkspace = mutation({
+    args:{
+        workspaceId:v.id('workspace')
+    },
+    handler:async(ctx,args)=>{
+        const result = await ctx.db.delete(args.workspaceId);
+        return result;
+    }
+})
