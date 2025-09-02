@@ -1,36 +1,106 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# LucidAI - AI-Powered Code Generation Platform
 
-## Getting Started
+An intelligent web development platform that leverages AI to generate, preview, and deploy stunning web applications with minimal effort.
 
-First, run the development server:
+## 🚀 Features
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+- **AI-Powered Code Generation**: Generate complete React applications from natural language descriptions
+- **Live Code Preview**: See your generated code in action with integrated Sandpack
+- **Real-time Collaboration**: Work with AI to iterate and improve your applications
+- **Modern UI Components**: Beautiful, responsive components built with Tailwind CSS
+- **Authentication**: Secure Google OAuth integration
+- **Token System**: Manage usage with built-in token economy
+- **Workspace Management**: Organize and manage multiple projects
+
+## 🛠️ Tech Stack
+
+- **Frontend**: Next.js 15, React 19, Tailwind CSS
+- **Backend**: Convex (Serverless Database)
+- **AI**: Google Generative AI (Gemini)
+- **Authentication**: Google OAuth
+- **UI Components**: Radix UI, Lucide Icons
+- **Code Editor**: CodeSandbox Sandpack
+
+## 📦 Installation
+
+1. **Clone the repository**
+
+   ```bash
+   git clone https://github.com/RaghavCLI/LucidAI.git
+   cd LucidAI
+   ```
+
+2. **Install dependencies**
+
+   ```bash
+   npm install
+   ```
+
+3. **Set up environment variables**
+   Create a `.env.local` file with:
+
+   ```env
+   NEXT_PUBLIC_GOOGLE_AUTH_KEY=your_google_oauth_client_id
+   NEXT_PUBLIC_GEMINI_API_KEY=your_gemini_api_key
+   NEXT_PUBLIC_CONVEX_URL=your_convex_deployment_url
+   ```
+
+4. **Set up Convex**
+
+   ```bash
+   npx convex dev
+   ```
+
+5. **Run the development server**
+
+   ```bash
+   npm run dev
+   ```
+
+6. **Open [http://localhost:3000](http://localhost:3000)**
+
+## 🎯 Usage
+
+1. **Sign in** with your Google account
+2. **Describe your app** in natural language
+3. **Generate code** with AI assistance
+4. **Preview and edit** in the live code editor
+5. **Deploy** your application
+
+## 📁 Project Structure
+
+```
+lucidai/
+├── app/                    # Next.js app directory
+│   ├── api/               # API routes
+│   ├── layout.js          # Root layout
+│   └── page.js            # Home page
+├── components/            # React components
+│   ├── customs/          # Custom components
+│   └── ui/               # UI components
+├── convex/               # Convex backend
+│   ├── schema.js         # Database schema
+│   └── users.js          # User mutations/queries
+├── context/              # React context providers
+├── hooks/                # Custom React hooks
+└── lib/                  # Utility functions
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## 🤝 Contributing
 
-You can start editing the page by modifying `app/page.js`. The page auto-updates as you edit the file.
+Contributions are welcome! Please feel free to submit a Pull Request.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## 📄 License
 
-## Learn More
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
-To learn more about Next.js, take a look at the following resources:
+## 🙏 Acknowledgments
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+- Built with [Next.js](https://nextjs.org)
+- Powered by [Google Generative AI](https://ai.google.dev)
+- Database by [Convex](https://convex.dev)
+- UI components from [Radix UI](https://radix-ui.com)
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+---
 
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+**Made with ❤️ by [RaghavCLI](https://github.com/RaghavCLI)**
