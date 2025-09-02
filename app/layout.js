@@ -4,6 +4,7 @@ import { ThemeProvider } from "../components/Theme-provider";
 import ConvexClientProvider from "./ConvexClientProvider";
 import Header from "../components/customs/Header";
 import { Toaster } from "sonner";
+import { UserDetailProvider } from "../context/UserDetailContext";
 
 
 const spaceGrotesk = Space_Grotesk({
@@ -43,18 +44,20 @@ export default function RootLayout({ children }) {
         className={`${spaceGrotesk.variable} ${jetbrainsMono.variable} antialiased font-sans`}
       >
         <ConvexClientProvider>
-          <ThemeProvider attribute="class" defaultTheme="dark" enableSystem={false}>
-            <div className="min-h-screen w-full relative">
-              {/* Header on every page */}
-              <Header />
-              
-              {/* Page content */}
-              <main>
-                {children}
-                <Toaster />
-              </main>
-            </div>
-          </ThemeProvider>
+          <UserDetailProvider>
+            <ThemeProvider attribute="class" defaultTheme="dark" enableSystem={false}>
+              <div className="min-h-screen w-full relative">
+                {/* Header on every page */}
+                <Header />
+                
+                {/* Page content */}
+                <main>
+                  {children}
+                  <Toaster />
+                </main>
+              </div>
+            </ThemeProvider>
+          </UserDetailProvider>
         </ConvexClientProvider>
       </body>
     </html>
