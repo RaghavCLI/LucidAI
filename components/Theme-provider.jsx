@@ -4,6 +4,7 @@ import React, { use } from "react";
 import { ThemeProvider as NextThemesProvider } from "next-themes";
 import { MessagesContext } from "@/context/MessagesContext";
 import { useState, useContext } from "react";
+import { UserDetailContext } from "@/context/UserDetailContext";
 import { GoogleOAuthProvider } from "@react-oauth/google";
 import { useEffect } from "react";
 import { useConvex } from "convex/react";
@@ -14,6 +15,7 @@ import { PayPalScriptProvider } from "@paypal/react-paypal-js";
 
 export function ThemeProvider(props) {
   const [messages, setMessages] = useState();
+  const [userDetail, setUserDetail] = useState();
   const convex = useConvex();
   const { children, ...rest } = props;
 
@@ -31,6 +33,7 @@ export function ThemeProvider(props) {
           const result = await convex.query(api.users.getUser, {
             email: user.email,
           });
+          setUserDetail(result);
           console.log(result);
         }
       }
@@ -40,18 +43,20 @@ export function ThemeProvider(props) {
     <div>
       <GoogleOAuthProvider clientId={process.env.NEXT_PUBLIC_GOOGLE_AUTH_KEY}>
         <PayPalScriptProvider options={{ clientId: "test" }}>
-          <MessagesContext.Provider value={{ messages, setMessages }}>
-            <NextThemesProvider
-              {...rest}
-              disableTransitionOnChange={false}
-              storageKey="lucidai-theme"
-            >
-              <SidebarProvider>
-                <AppSideBar />
-                {children}
-              </SidebarProvider>
-            </NextThemesProvider>
-          </MessagesContext.Provider>
+          <UserDetailContext.Provider value={{ userDetail, setUserDetail }}>
+            <MessagesContext.Provider value={{ messages, setMessages }}>
+              <NextThemesProvider
+                {...rest}
+                disableTransitionOnChange={false}
+                storageKey="lucidai-theme"
+              >
+                <SidebarProvider>
+                  <AppSideBar />
+                  {children}
+                </SidebarProvider>
+              </NextThemesProvider>
+            </MessagesContext.Provider>
+          </UserDetailContext.Provider>
         </PayPalScriptProvider>
       </GoogleOAuthProvider>
     </div>
